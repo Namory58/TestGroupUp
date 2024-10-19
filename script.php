@@ -7,7 +7,25 @@ $filename = $argv[1];
 if (!file_exists(filename: $filename)) {
     die("Erreur: Le fichier $filename n'existe pas.\n");
 }
-$bdd->exec("TRUNCATE TABLE users"); //Supprimer tous les élements de la base de données
+
+$tableCheck = $bdd->query("SHOW TABLES LIKE 'users'");
+$tableExists = $tableCheck->rowCount() > 0;
+
+    if (!$tableExists) {
+        // Si la table n'existe pas, la créer
+        $createTableQuery = "
+            CREATE TABLE users (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                nom VARCHAR(100) NOT NULL,
+                ca DECIMAL(10,2) NOT NULL,
+                objectif DECIMAL(10,2),
+                taux_atteinte DECIMAL(5,2)
+            )";
+        $bdd->exec($createTableQuery);
+    }else{
+        $bdd->exec("TRUNCATE TABLE users"); 
+    }
+//Supprimer tous les élements de la base de données
 
 $fileObjectifs = 'data/objectifs.csv';
 $file2 = fopen($fileObjectifs, 'r');
