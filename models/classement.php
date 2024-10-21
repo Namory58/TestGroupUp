@@ -1,11 +1,8 @@
 <?php
     function displayClassement(){
         include('../models/configuration.php');
-        $requete = $bdd->prepare('SELECT nom, ca,taux_atteinte FROM users');
-        $requete->execute();
+        $requete = $bdd->query('SELECT nom, ca, taux_atteinte FROM users');
         $reponse = $requete->fetchAll();
         return $reponse;
     }
-
-
 ?>
